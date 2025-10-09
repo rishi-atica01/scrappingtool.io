@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Scrapping Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .blue-bg {
+      background: #1656a3;
+      width: 100vw;
+      height: 390px;
+      border-bottom-left-radius: 22px;
+      border-bottom-right-radius: 22px;
+      position: absolute; 
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .upload-box {
+      background: white;
+      padding: 40px 32px 32px 32px;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+      text-align: center;
+      width: 370px;
+      max-width: 95vw;
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      font-size: 2.1rem;
+      margin-bottom: 10px;
+      color: #2d3a4b;
+      letter-spacing: 1px;
+    }
+    .desc {
+      font-size: 1.08rem;
+      color: #5a6a85;
+      margin-bottom: 28px;
+    }
+    .file-input-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 22px;  
+    }
+    input[type="file"] {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #f7fafc;
+      font-size: 1rem;
+      width: 70%;
+      margin: 0;
+    }
+    button {
+      background: linear-gradient(90deg, #4CAF50 0%, #2e8b57 100%);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.08rem;
+      font-weight: 500;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #224ac3 0%, #276c47 100%);
+    }
+    #message {
+      margin-top: 18px;
+      color: #d32f2f;
+      font-size: 1rem;
+      min-height: 24px;
+    }
+    @media (max-width: 600px) {
+      .blue-bg {
+        height: 180px;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+      }
+      .upload-box {
+        padding: 24px 8vw 20px 8vw;
+        width: 100%;
+        border-radius: 10px;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      .desc {
+        font-size: 1rem;
+      }
+      button {
+        padding: 10px 18px;
+        font-size: 1rem;
+      }
+      input[type="file"] {
+        font-size: 0.95rem;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blue-bg"></div>
+  <div class="upload-box">
+    <h2>Email Scrapping Tool</h2>
+    <div class="desc">Please upload your file here</div>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="file-input-wrapper">
+        <input type="file" name="dataFile" accept=".xlsx,.xls" required />
+      </div>
+      <button type="submit">Upload</button>
+    </form>
+    <p id="message"></p>
+  </div>
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      try {
+        let res = await fetch("https://dev-n8n.atica.io/webhook/c4859a2e-7cdd-4e8d-97f5-876c6b658dad", {
+          method: "POST",
+          body: formData
+        });
+
+        if (res.ok) {
+          window.location.href = "success.html"; // redirect to success page
+        } else {
+          document.getElementById("message").innerText = "Upload failed. Try again.";
+        }
+      } catch (err) {
+        document.getElementById("message").innerText = "Error: " + err;
+      }
+    });
+  </script>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSfqndHmaS-LQvk9Cttt6LIh6o8Y5Bjr1LRF1l4hByxmiJbX5Q/viewform?usp=dialog" target="_blank" class="feedback-btn">💬 Give Feedback</a>
+<style>
+  .feedback-btn {
+    position: fixed;
+    left: 50%;
+    bottom: 32px;
+    transform: translateX(-50%);
+    background: #1656a3;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    padding: 14px 30px;
+    border-radius: 30px;
+    box-shadow: 0 4px 16px rgba(22,86,163,0.13);
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    z-index: 10;
+    letter-spacing: 1px;
+    display: inline-block;
+  }
+  .feedback-btn:hover {
+    background: #11407c;
+    box-shadow: 0 6px 24px rgba(22,86,163,0.18);
+  }
+  @media (max-width: 600px) {
+    .feedback-btn {
+      font-size: 1rem;
+      padding: 10px 18px;
+      bottom: 16px;
+    }
+  }
+</style>
+</body>
+</html>
